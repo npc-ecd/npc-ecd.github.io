@@ -1,0 +1,85 @@
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+
+    .folder, .subfolder {
+      padding: 10px 15px;
+      border-radius: 6px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 5px;
+    }
+
+    .folder {
+      background: #007bff;
+      color: white;
+    }
+
+    .subfolder {
+      background: #28a745;
+      color: white;
+      display: none;
+    }
+
+    .arrow {
+      display: inline-block;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+      width: 12px;
+      height: 12px;
+      border-style: solid;
+      border-width: 2px 2px 0 0;
+      border-color: white;
+      transform: rotate(45deg);
+      cursor: pointer;
+    }
+
+    .open .arrow {
+      transform: rotate(135deg);
+    }
+
+    .subfiles {
+      display: none;
+      background: #dff0d8;
+      color: #155724;
+      padding: 10px 15px;
+      border-radius: 6px 6px 6px 6px;
+      margin-bottom: 5px;
+      width: fit-content;
+    }
+
+    .subfiles.open {
+      display: block;
+    }
+
+    .subfile-item {
+      cursor: pointer;
+      margin: 6px 0;
+      padding: 6px 10px;
+      background: #c3e6cb;
+      border-radius: 4px;
+      color: #155724;
+      user-select: none;
+    }
+
+    .subfile-item:hover {
+      background: #a1d99b;
+    }
+
+    #viewer {
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      height: 500px;
+      width: 900px;
+      background: white;
+    }
+
+    iframe, img {
+      width: 900px;
+      height: 500px;
+    }
