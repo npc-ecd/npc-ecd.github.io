@@ -1,258 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FSF1D Course Content</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #f9f9f9;
-  }
-  h1 {
-    margin-bottom: 1rem;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FSF1D Course</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
 
-  /* Folder box style */
-  .folder {
-    background: #007bff;
-    color: white;
-    padding: 10px 15px;
-    margin: 10px 0 5px;
-    border-radius: 6px;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    cursor: default;
-  }
+    h1 {
+      margin-bottom: 1rem;
+    }
 
-  /* Arrow style */
-  .arrow {
-    display: inline-block;
-    margin-right: 10px;
-    transition: transform 0.3s ease;
-    width: 12px;
-    height: 12px;
-    border-style: solid;
-    border-width: 2px 2px 0 0;
-    border-color: white;
-    transform: rotate(45deg);
-    cursor: pointer;
-  }
-  .open > .arrow {
-    transform: rotate(135deg);
-  }
+    /* === FOLDERS === */
+    .folder {
+      background: #007bff;
+      color: white;
+      padding: 10px 15px;
+      margin: 10px 0 5px;
+      border-radius: 6px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      width: fit-content;
+    }
 
-  /* Files container inside a folder */
-  .files {
-    margin-top: 8px;
-    display: none;
-    padding: 10px 15px;
-    border-radius: 0 0 6px 6px;
-    background: #e6f0ff; /* lighter blue for files */
-    color: #003366;
-  }
-  .files.open {
-    display: block;
-  }
+    .arrow {
+      display: inline-block;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+      width: 12px;
+      height: 12px;
+      border-style: solid;
+      border-width: 2px 2px 0 0;
+      border-color: white;
+      transform: rotate(45deg);
+      cursor: pointer;
+    }
 
-  /* File item style */
-  .file-item {
-    cursor: pointer;
-    margin: 6px 0;
-    padding: 6px 10px;
-    background: #cce0ff;
-    border-radius: 4px;
-    color: #004080;
-    user-select: none;
-  }
-  .file-item:hover {
-    background: #99c2ff;
-  }
+    .folder.open > .arrow {
+      transform: rotate(135deg);
+    }
 
-  /* Subfolder style (like Notes, Tests, Assignments) */
-  .subfolder {
-    background: #28a745; /* green */
-    color: white;
-    padding: 10px 15px;
-    margin: 8px 0 5px 0; /* no horizontal indent */
-    border-radius: 6px;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    cursor: default;
-  }
+    /* === SUBFOLDERS === */
+    .subfolder {
+      display: none;
+      background: #28a745;
+      color: white;
+      padding: 10px 15px;
+      margin: 6px 0;
+      border-radius: 6px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      width: fit-content;
+    }
 
-  /* Files container inside subfolder */
-  .subfiles {
-    margin-top: 8px;
-    display: none;
-    padding: 10px 15px;
-    border-radius: 0 0 6px 6px;
-    background: #dff0d8; /* lighter green for subfolder files */
-    color: #155724;
-  }
-  .subfiles.open {
-    display: block;
-  }
+    .subfolder.open > .arrow {
+      transform: rotate(135deg);
+    }
 
-  /* File item inside subfolder */
-  .subfile-item {
-    cursor: pointer;
-    margin: 6px 0;
-    padding: 6px 10px;
-    background: #c3e6cb;
-    border-radius: 4px;
-    color: #155724;
-    user-select: none;
-  }
-  .subfile-item:hover {
-    background: #a1d99b;
-  }
+    .subfiles {
+      display: none;
+      background: #dff0d8;
+      color: #155724;
+      padding: 10px 15px;
+      border-radius: 0 0 6px 6px;
+      margin: 0 0 15px 0;
+    }
 
-  /* Viewer area */
-  #viewer {
-    margin-top: 30px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    min-height: 400px;
-    background: white;
-  }
-  iframe, img {
-    max-width: 100%;
-    height: 600px;
-  }
-</style>
+    .subfiles.open {
+      display: block;
+    }
+
+    /* === FILES === */
+    .subfile-item {
+      cursor: pointer;
+      margin: 6px 0;
+      padding: 6px 10px;
+      background: #c3e6cb;
+      border-radius: 4px;
+      color: #155724;
+      user-select: none;
+    }
+
+    .subfile-item:hover {
+      background: #a1d99b;
+    }
+
+    /* === VIEWER === */
+    #viewer {
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      min-height: 400px;
+      background: white;
+    }
+
+    iframe, img {
+      max-width: 100%;
+      height: 600px;
+    }
+  </style>
 </head>
 <body>
 
 <h1>FSF1D Course Content</h1>
 
-<!-- Unit 1 folder -->
-<div class="folder" id="unit1">
+<!-- ========== MAIN FOLDERS ========== -->
+
+<div class="folder" data-id="unit1">
   <span class="arrow"></span>
   Unit 1 - Basics
-  <div class="files" id="unit1-files">
-    <!-- Subfolders for Unit 1 -->
-    <div class="subfolder" id="unit1-notes">
-      <span class="arrow"></span>
-      Notes
-      <div class="subfiles" id="unit1-notes-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit1/notes/lesson1.pdf">Lesson 1 Notes (PDF)</div>
-        <div class="subfile-item" data-type="image" data-src="content/unit1/notes/vocab.png">Vocabulary Image</div>
-      </div>
-    </div>
-    <div class="subfolder" id="unit1-assignments">
-      <span class="arrow"></span>
-      Assignments
-      <div class="subfiles" id="unit1-assignments-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit1/assignments/assignment1.pdf">Assignment 1 (PDF)</div>
-      </div>
-    </div>
-    <div class="subfolder" id="unit1-tests">
-      <span class="arrow"></span>
-      Tests
-      <div class="subfiles" id="unit1-tests-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit1/tests/test1.pdf">Test 1 (PDF)</div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- Unit 2 folder -->
-<div class="folder" id="unit2">
+<div class="folder" data-id="unit2">
   <span class="arrow"></span>
   Unit 2 - Grammar
-  <div class="files" id="unit2-files">
-    <div class="subfolder" id="unit2-notes">
-      <span class="arrow"></span>
-      Notes
-      <div class="subfiles" id="unit2-notes-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit2/notes/grammar.pdf">Grammar Notes (PDF)</div>
-      </div>
-    </div>
-    <div class="subfolder" id="unit2-assignments">
-      <span class="arrow"></span>
-      Assignments
-      <div class="subfiles" id="unit2-assignments-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit2/assignments/assignment1.pdf">Assignment 1 (PDF)</div>
-      </div>
-    </div>
-    <div class="subfolder" id="unit2-tests">
-      <span class="arrow"></span>
-      Tests
-      <div class="subfiles" id="unit2-tests-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/unit2/tests/test1.pdf">Test 1 (PDF)</div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- Review Materials folder -->
-<div class="folder" id="review">
+<div class="folder" data-id="review">
   <span class="arrow"></span>
   Review Materials
-  <div class="files" id="review-files">
-    <div class="subfolder" id="review-notes">
-      <span class="arrow"></span>
-      Notes
-      <div class="subfiles" id="review-notes-files">
-        <div class="subfile-item" data-type="pdf" data-src="content/review/summary.pdf">Summary Notes</div>
-      </div>
-    </div>
+</div>
+
+<!-- ========== SUBFOLDERS FOR UNIT 1 ========== -->
+
+<div class="subfolder" data-parent="unit1">
+  <span class="arrow"></span>
+  Notes
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example1/lesson1.pdf?raw=1">Lesson 1 Notes (PDF)</div>
+    <div class="subfile-item" data-type="image" data-src="https://www.dropbox.com/s/example2/vocab.png?raw=1">Vocabulary Image</div>
   </div>
 </div>
 
-<!-- Viewer -->
+<div class="subfolder" data-parent="unit1">
+  <span class="arrow"></span>
+  Assignments
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example3/assignment1.pdf?raw=1">Assignment 1</div>
+  </div>
+</div>
+
+<div class="subfolder" data-parent="unit1">
+  <span class="arrow"></span>
+  Tests
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example4/test1.pdf?raw=1">Test 1</div>
+  </div>
+</div>
+
+<!-- ========== SUBFOLDERS FOR UNIT 2 ========== -->
+
+<div class="subfolder" data-parent="unit2">
+  <span class="arrow"></span>
+  Notes
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example5/grammar.pdf?raw=1">Grammar Notes</div>
+  </div>
+</div>
+
+<div class="subfolder" data-parent="unit2">
+  <span class="arrow"></span>
+  Assignments
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example6/assignment2.pdf?raw=1">Assignment 2</div>
+  </div>
+</div>
+
+<!-- ========== SUBFOLDERS FOR REVIEW ========== -->
+
+<div class="subfolder" data-parent="review">
+  <span class="arrow"></span>
+  Notes
+  <div class="subfiles">
+    <div class="subfile-item" data-type="pdf" data-src="https://www.dropbox.com/s/example7/summary.pdf?raw=1">Summary Notes</div>
+  </div>
+</div>
+
+<!-- ========== VIEWER ========== -->
+
 <div id="viewer">
   <em>Select a file to view its content here.</em>
 </div>
 
+<!-- ========== SCRIPT ========== -->
+
 <script>
-  // Toggle main folders open/close on arrow click
+  // Toggle FOLDER (Unit 1, Unit 2)
   document.querySelectorAll('.folder > .arrow').forEach(arrow => {
     arrow.addEventListener('click', e => {
-      e.stopPropagation();
       const folder = arrow.parentElement;
       folder.classList.toggle('open');
-      const files = folder.querySelector(':scope > .files');
-      if (files) files.classList.toggle('open');
+      const folderId = folder.getAttribute('data-id');
+
+      // Toggle all subfolders with matching parent
+      document.querySelectorAll(`.subfolder[data-parent="${folderId}"]`).forEach(sub => {
+        sub.style.display = folder.classList.contains('open') ? 'flex' : 'none';
+      });
     });
   });
 
-  // Toggle subfolders open/close on arrow click
+  // Toggle SUBFOLDER (Notes, Assignments)
   document.querySelectorAll('.subfolder > .arrow').forEach(arrow => {
     arrow.addEventListener('click', e => {
       e.stopPropagation();
-      const subfolder = arrow.parentElement;
-      subfolder.classList.toggle('open');
-      const subfiles = subfolder.querySelector(':scope > .subfiles');
+      const sub = arrow.parentElement;
+      sub.classList.toggle('open');
+      const subfiles = sub.querySelector('.subfiles');
       if (subfiles) subfiles.classList.toggle('open');
     });
   });
 
-  // File click: show in viewer
-  function showFileInViewer(type, src) {
-    const viewer = document.getElementById('viewer');
-    if (type === 'pdf') {
-      viewer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
-    } else if (type === 'image') {
-      viewer.innerHTML = `<img src="${src}" alt="File preview" />`;
-    } else {
-      viewer.innerHTML = `<p>Unsupported file type.</p>`;
-    }
-  }
-
-  // Attach click listeners to files
-  document.querySelectorAll('.file-item, .subfile-item').forEach(file => {
+  // Handle file click
+  document.querySelectorAll('.subfile-item').forEach(file => {
     file.addEventListener('click', e => {
-      e.stopPropagation();
       const type = file.getAttribute('data-type');
       const src = file.getAttribute('data-src');
-      showFileInViewer(type, src);
+      const viewer = document.getElementById('viewer');
+
+      if (type === 'pdf') {
+        viewer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
+      } else if (type === 'image') {
+        viewer.innerHTML = `<img src="${src}" alt="File preview" />`;
+      } else {
+        viewer.innerHTML = `<p>Unsupported file type.</p>`;
+      }
     });
   });
 </script>
