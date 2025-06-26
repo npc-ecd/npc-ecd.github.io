@@ -13,23 +13,39 @@
   h1 {
     margin-bottom: 1rem;
   }
+
+  /* Parent folder style */
   .folder {
-    cursor: pointer;
     background: #007bff;
     color: white;
     padding: 10px 15px;
-    margin: 5px 0;
-    border-radius: 4px;
+    margin: 10px 0 5px;
+    border-radius: 6px;
     user-select: none;
     display: flex;
     align-items: center;
+    width: fit-content;
+    cursor: default; /* no pointer on whole box */
   }
-  .folder.open {
-    background: #0056b3;
+
+  /* Nested folder style: separate box below parent folder */
+  .nested-folder {
+    background: #28a745; /* green */
+    color: white;
+    padding: 10px 15px;
+    margin: 10px 0 5px 40px; /* indent */
+    border-radius: 6px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    cursor: default;
   }
-  .folder .arrow {
+
+  /* Arrow styles for both folder types */
+  .arrow {
     display: inline-block;
-    margin-right: 8px;
+    margin-right: 10px;
     transition: transform 0.3s ease;
     width: 12px;
     height: 12px;
@@ -37,28 +53,35 @@
     border-width: 2px 2px 0 0;
     border-color: white;
     transform: rotate(45deg);
+    cursor: pointer;
   }
-  .folder.open .arrow {
+  .open > .arrow {
     transform: rotate(135deg);
   }
+
+  /* Files container inside folder */
   .files {
-    margin-left: 20px;
-    margin-top: 5px;
+    margin-left: 32px;
+    margin-top: 8px;
     display: none;
   }
   .files.open {
     display: block;
   }
+
+  /* Files styling */
   .file-item {
     cursor: pointer;
-    margin: 3px 0 3px 20px;
+    margin: 4px 0;
     color: #007bff;
     text-decoration: underline;
   }
-  .viewer {
-    margin-top: 20px;
+
+  /* Viewer area */
+  #viewer {
+    margin-top: 30px;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 15px;
     min-height: 400px;
     background: white;
   }
@@ -72,53 +95,62 @@
 
 <h1>FSF1D Course Content</h1>
 
-<div id="finder">
-  <div class="folder">
-    <span class="arrow"></span>
-    Unit 1 - Basics
-    <div class="files">
-      <div class="folder">
-        <span class="arrow"></span>
-        Passe Compose
-        <div class="files">
-          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/assignments.pdf">Assignments (PDF)</div>
-          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/tests.pdf">Tests (PDF)</div>
-          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/notes.pdf">Notes (PDF)</div>
-        </div>
-      </div>
-      <div class="file-item" data-type="pdf" data-src="content/unit1/lesson1.pdf">Lesson 1 Notes (PDF)</div>
-      <div class="file-item" data-type="image" data-src="content/unit1/vocab.png">Vocabulary Image</div>
-    </div>
-  </div>
-
-  <div class="folder">
-    <span class="arrow"></span>
-    Unit 2 - Grammar
-    <div class="files">
-      <div class="file-item" data-type="pdf" data-src="content/unit2/exercises.pdf">Exercises (PDF)</div>
-      <div class="file-item" data-type="image" data-src="content/unit2/chart.jpg">Grammar Chart</div>
-    </div>
-  </div>
-
-  <div class="folder">
-    <span class="arrow"></span>
-    Review Materials
-    <div class="files">
-      <div class="file-item" data-type="pdf" data-src="content/review/summary.pdf">Summary Notes</div>
-    </div>
+<!-- Parent folder -->
+<div class="folder" id="unit1">
+  <span class="arrow"></span>
+  Unit 1 - Basics
+  <div class="files" id="unit1-files">
+    <div class="file-item" data-type="pdf" data-src="content/unit1/lesson1.pdf">Lesson 1 Notes (PDF)</div>
+    <div class="file-item" data-type="image" data-src="content/unit1/vocab.png">Vocabulary Image</div>
   </div>
 </div>
 
-<div id="viewer" class="viewer">
+<!-- Nested folder visually separate -->
+<div class="nested-folder" id="passe-compose">
+  <span class="arrow"></span>
+  Passe Compose
+  <div class="files" id="passe-compose-files">
+    <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/assignments.pdf">Assignments (PDF)</div>
+    <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/tests.pdf">Tests (PDF)</div>
+    <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/notes.pdf">Notes (PDF)</div>
+  </div>
+</div>
+
+<!-- Another parent folder -->
+<div class="folder" id="unit2">
+  <span class="arrow"></span>
+  Unit 2 - Grammar
+  <div class="files" id="unit2-files">
+    <div class="file-item" data-type="pdf" data-src="content/unit2/exercises.pdf">Exercises (PDF)</div>
+    <div class="file-item" data-type="image" data-src="content/unit2/chart.jpg">Grammar Chart</div>
+  </div>
+</div>
+
+<!-- Another parent folder -->
+<div class="folder" id="review">
+  <span class="arrow"></span>
+  Review Materials
+  <div class="files" id="review-files">
+    <div class="file-item" data-type="pdf" data-src="content/review/summary.pdf">Summary Notes</div>
+  </div>
+</div>
+
+<!-- Viewer -->
+<div id="viewer">
   <em>Select a file to view its content here.</em>
 </div>
 
 <script>
-  // Toggle folders open/close and rotate arrow
-  document.querySelectorAll('.folder').forEach(folder => {
-    folder.addEventListener('click', () => {
-      folder.classList.toggle('open');
-      const files = folder.querySelector(':scope > .files');
+  // Toggle open/close ONLY on arrow click (for both folder and nested-folder)
+  document.querySelectorAll('.folder > .arrow, .nested-folder > .arrow').forEach(arrow => {
+    arrow.addEventListener('click', e => {
+      e.stopPropagation();
+
+      const parent = arrow.parentElement;
+      parent.classList.toggle('open');
+
+      // Find the immediate .files sibling inside this folder container
+      const files = parent.querySelector(':scope > .files');
       if (files) {
         files.classList.toggle('open');
       }
@@ -128,7 +160,7 @@
   // Show file in viewer
   document.querySelectorAll('.file-item').forEach(file => {
     file.addEventListener('click', e => {
-      e.stopPropagation(); // Prevent folder toggle
+      e.stopPropagation();
 
       const viewer = document.getElementById('viewer');
       const type = file.getAttribute('data-type');
