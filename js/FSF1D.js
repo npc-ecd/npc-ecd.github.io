@@ -1,6 +1,26 @@
-if (localStorage.getItem("access_granted") !== "true") {
-  window.location.href = "index.html"; // or your login page
-}
+(async function () {
+  const username = localStorage.getItem("username");
+  const passwordHash = localStorage.getItem("passwordHash");
+
+  if (!username || !passwordHash) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const response = await fetch("https://verdant-lebkuchen-c33346.netlify.app/.netlify/functions/check-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, passwordHash })
+  });
+
+  const result = await response.json();
+
+  if (!result.success) {
+    localStorage.removeItem("username");
+    localStorage.removeItem("passwordHash");
+    window.location.href = "index.html";
+  }
+})();
   document.addEventListener('contextmenu', e => e.preventDefault());
 
   // Disable dragging of any images or links
