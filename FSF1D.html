@@ -21,9 +21,25 @@
     margin: 5px 0;
     border-radius: 4px;
     user-select: none;
+    display: flex;
+    align-items: center;
   }
   .folder.open {
     background: #0056b3;
+  }
+  .folder .arrow {
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+    width: 12px;
+    height: 12px;
+    border-style: solid;
+    border-width: 2px 2px 0 0;
+    border-color: white;
+    transform: rotate(45deg);
+  }
+  .folder.open .arrow {
+    transform: rotate(135deg);
   }
   .files {
     margin-left: 20px;
@@ -35,7 +51,7 @@
   }
   .file-item {
     cursor: pointer;
-    margin: 3px 0;
+    margin: 3px 0 3px 20px;
     color: #007bff;
     text-decoration: underline;
   }
@@ -57,21 +73,36 @@
 <h1>FSF1D Course Content</h1>
 
 <div id="finder">
-  <div class="folder">Unit 1 - Basics
+  <div class="folder">
+    <span class="arrow"></span>
+    Unit 1 - Basics
     <div class="files">
+      <div class="folder">
+        <span class="arrow"></span>
+        Passe Compose
+        <div class="files">
+          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/assignments.pdf">Assignments (PDF)</div>
+          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/tests.pdf">Tests (PDF)</div>
+          <div class="file-item" data-type="pdf" data-src="content/unit1/passe-compose/notes.pdf">Notes (PDF)</div>
+        </div>
+      </div>
       <div class="file-item" data-type="pdf" data-src="content/unit1/lesson1.pdf">Lesson 1 Notes (PDF)</div>
       <div class="file-item" data-type="image" data-src="content/unit1/vocab.png">Vocabulary Image</div>
     </div>
   </div>
 
-  <div class="folder">Unit 2 - Grammar
+  <div class="folder">
+    <span class="arrow"></span>
+    Unit 2 - Grammar
     <div class="files">
       <div class="file-item" data-type="pdf" data-src="content/unit2/exercises.pdf">Exercises (PDF)</div>
       <div class="file-item" data-type="image" data-src="content/unit2/chart.jpg">Grammar Chart</div>
     </div>
   </div>
 
-  <div class="folder">Review Materials
+  <div class="folder">
+    <span class="arrow"></span>
+    Review Materials
     <div class="files">
       <div class="file-item" data-type="pdf" data-src="content/review/summary.pdf">Summary Notes</div>
     </div>
@@ -83,21 +114,22 @@
 </div>
 
 <script>
-  // Toggle folder open/close
+  // Toggle folders open/close and rotate arrow
   document.querySelectorAll('.folder').forEach(folder => {
     folder.addEventListener('click', () => {
       folder.classList.toggle('open');
-      const files = folder.querySelector('.files');
+      const files = folder.querySelector(':scope > .files');
       if (files) {
         files.classList.toggle('open');
       }
     });
   });
 
-  // Show selected file in viewer
+  // Show file in viewer
   document.querySelectorAll('.file-item').forEach(file => {
-    file.addEventListener('click', (e) => {
-      e.stopPropagation(); // prevent folder toggle
+    file.addEventListener('click', e => {
+      e.stopPropagation(); // Prevent folder toggle
+
       const viewer = document.getElementById('viewer');
       const type = file.getAttribute('data-type');
       const src = file.getAttribute('data-src');
