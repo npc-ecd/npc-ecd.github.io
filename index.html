@@ -67,7 +67,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
   if (result.success) {
     // Redirect to course HTML page named exactly as username input
-    window.location.href = `${username}.html`;
+localStorage.setItem("username", username); // e.g., FSF1D
+localStorage.setItem("passwordHash", hash);
+window.location.href = username + ".html";
   } else {
     document.getElementById('message').textContent = 'Invalid course code or access code.';
   }
