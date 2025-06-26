@@ -1,3 +1,6 @@
+if (localStorage.getItem("access_granted") !== "true") {
+  window.location.href = "index.html"; // or your login page
+}
   document.addEventListener('contextmenu', e => e.preventDefault());
 
   // Disable dragging of any images or links
