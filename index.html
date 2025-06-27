@@ -1,80 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>ECD Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    form {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      display: block;
-      margin: 1em 0;
-      width: 100%;
-      padding: 0.5em;
-      font-size: 1em;
-    }
-    .error {
-      color: red;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Secure Data Vault</title>
 </head>
 <body>
+  <h1>Store Data (Admin)</h1>
+  <input id="store-id" placeholder="Entry ID"><br>
+  <textarea id="store-content" placeholder="Plaintext content"></textarea><br>
+  <input id="store-password" placeholder="Admin Password" type="password"><br>
+  <button onclick="storeData()">Store Entry</button>
 
-  <form id="loginForm">
-    <h2>Access ECD</h2>
-    <input type="text" id="username" placeholder="Username" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit">Login</button>
-    <p id="message" class="error"></p>
-  </form>
+  <h1>Retrieve Data</h1>
+  <input id="fetch-id" placeholder="Entry ID"><br>
+  <input id="fetch-key" placeholder="Access Key"><br>
+  <button onclick="fetchData()">Fetch Entry</button>
+  <pre id="result"></pre>
 
   <script>
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(hashBuffer))
-                  .map(b => b.toString(16).padStart(2, '0'))
-                  .join('');
+    async function sha256(text) {
+      const encoded = new TextEncoder().encode(text);
+      const buffer = await crypto.subtle.digest("SHA-256", encoded);
+      return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+    async function storeData() {
+      const id = document.getElementById("store-id").value;
+      const content = document.getElementById("store-content").value;
+      const pw = await sha256(document.getElementById("store-password").value);
 
-  const username = document.getElementById('username').value.trim(); // course code
-  const password = document.getElementById('password').value;
-  const passwordHash = await hashPassword(password);
+      const res = await fetch("https://verdant-lebkuchen-c33346.netlify.app/.netlify/functions/store-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, content, passwordHash: pw })
+      });
+      const data = await res.json();
+      alert(data.success ? "Stored!" : "Error");
+    }
 
-  const response = await fetch('https://verdant-lebkuchen-c33346.netlify.app/.netlify/functions/check-password', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, passwordHash })
-  });
+    async function fetchData() {
+      const id = document.getElementById("fetch-id").value;
+      const accessKey = await sha256(document.getElementById("fetch-key").value);
 
-  const result = await response.json();
+      const res = await fetch("https://verdant-lebkuchen-c33346.netlify.app/.netlify/functions/fetch-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, accessKey })
+      });
 
-  if (result.success) {
-    // Redirect to course HTML page named exactly as username input
-localStorage.setItem("username", username); // e.g., FSF1D
-localStorage.setItem("passwordHash", passwordHash);
-window.location.href = username + ".html";
-  } else {
-    document.getElementById('message').textContent = 'Invalid course code or access code.';
-  }
-});
+      const result = await res.json();
+      document.getElementById("result").textContent = result.data || "Access denied or not found.";
+    }
   </script>
-
 </body>
 </html>
